@@ -12,7 +12,6 @@ import numpy as np
 import pandas as pd
 import json
 import requests
-
 """
 Object representing a 2 dimensional vector
 """
@@ -330,7 +329,8 @@ def unpack_trigger(response):
     return triggers
 
 
-def get_triggers_by_ids(trigger_ids: List[int], sql_connection=None) -> List[Trigger]:
+def get_triggers_by_ids(trigger_ids: List[int],
+                        sql_connection=None) -> List[Trigger]:
     """ Connect to db and get events with ids on @trigger_ids 
 
     Parameters
@@ -340,10 +340,11 @@ def get_triggers_by_ids(trigger_ids: List[int], sql_connection=None) -> List[Tri
     """
     import psycopg2 as pg
 
-    connection = sql_connection if sql_connection else pg.connect(host="localhost",
-                                                                  database="dims_events",
-                                                                  user="admin",
-                                                                  password="pssd123")
+    connection = sql_connection if sql_connection else pg.connect(
+        host="localhost",
+        database="dims_events",
+        user="admin",
+        password="pssd123")
 
     cursor = connection.cursor()
 
@@ -359,14 +360,22 @@ def get_triggers_by_ids(trigger_ids: List[int], sql_connection=None) -> List[Tri
     return unpack_trigger(response)
 
 
-def get_triggers_by_collection_id(collection_id: int, sql_connection=None) -> List[Trigger]:
+def get_triggers_by_collection_id(collection_id: int,
+                                  sql_connection=None,
+                                  **kwargs) -> List[Trigger]:
     """ Connect to db and get events with ids on @trigger_ids """
     import psycopg2 as pg
 
-    connection = sql_connection if sql_connection else pg.connect(host="localhost",
-                                                                  database="dims_events",
-                                                                  user="admin",
-                                                                  password="pssd123")
+    if len(kwargs) == 0:
+        print("Using default connection parameters")
+        kwargs = {
+            "host": "localhost",
+            "database": "dims_events",
+            "user": "admin",
+            "password": "pssd123"
+        }
+
+    connection = sql_connection if sql_connection else pg.connect(kwargs)
 
     cursor = connection.cursor()
 
@@ -380,23 +389,28 @@ def get_triggers_by_collection_id(collection_id: int, sql_connection=None) -> Li
     return unpack_trigger(response)
 
 
-def create_datacollection(url,
-                 collection_name: str,
-                 collection_parameter_names: List[str],
-                 parameter_values: List[str],
-                 additional_trigger_info: List[str]):
-    
+def create_datacollection(url, collection_name: str,
+                          collection_parameter_names: List[str],
+                          parameter_values: List[str],
+                          additional_trigger_info: List[str]):
+
     generated_json = json.dumps({
-        "collection_name": collection_name,
-        "collection_parameter_names": collection_parameter_names,
-        "parameter_values": parameter_values,
-        "additional_trigger_info": additional_trigger_info
+        "collection_name":
+        collection_name,
+        "collection_parameter_names":
+        collection_parameter_names,
+        "parameter_values":
+        parameter_values,
+        "additional_trigger_info":
+        additional_trigger_info
     })
 
     print(f"{generated_json=}")
     response = requests.post(url + '/add-datacollection',
                              data=generated_json,
-                             headers={"Content-Type": "application/json",})
+                             headers={
+                                 "Content-Type": "application/json",
+                             })
 
     if response.status_code == 200:
         response = response.json()
@@ -408,12 +422,14 @@ def create_datacollection(url,
 
 
 def upload_trigger(trigger, collection_id, url):
-    generated_json = json.dumps( trigger_to_dict(trigger) )
+    generated_json = json.dumps(trigger_to_dict(trigger))
 
     print(f"{generated_json=}")
     response = requests.post(url + '/add-trigger/' + str(collection_id),
                              data=generated_json,
-                             headers={"Content-Type": "application/json",})
+                             headers={
+                                 "Content-Type": "application/json",
+                             })
 
     if response.status_code == 200:
         response = response.json()
