@@ -146,5 +146,5 @@ upload_trigger(tg.create_trigger_flat(
                             box_max_y=4,
                             additional_data={
                                 "speed": 12,
-                            }), collection_id, http://localhost/server/api)
+                            }), collection_id, "http://localhost/server/api")
 ```
