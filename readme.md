@@ -142,15 +142,12 @@ collection = dc.DataCollection(
 ### Uploading trigger:
 
 ```python
-import dimscommon.datacollection as dc
 import dimscommon.trigger as tg
-
-conn = dc.DataCollection("Test collection", [], [],
-                        ["speed"])
-
+collection_id = create_datacollection(url, "Test collection", [], [],
+                                              [])
 # ...
 
-collection.upload_trigger(tg.create_trigger_flat(
+upload_trigger(tg.create_trigger_flat(
                             file="filename",
                             start_frame=1,
                             end_frame=2,
@@ -160,5 +157,5 @@ collection.upload_trigger(tg.create_trigger_flat(
                             box_max_y=4,
                             additional_data={
                                 "speed": 12,
-                            }))
+                            }), collection_id, http://localhost/server/api)
 ```
