@@ -14,12 +14,6 @@ than to use `Trigger`
 import dimscommon.trigger as tg
 ```
 
-or to use `DataCollection`:
-
-```python
-import dimscommon.datacollection as dc
-```
-
 Tesing db can be launched using `docker-compose`
 
 ```python
