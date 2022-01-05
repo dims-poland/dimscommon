@@ -129,22 +129,17 @@ def get_triggers_from_db(trigger_ids: List[int]):
 
 When creating data collection coresponding tables in db will be created
 
+
 ```python
-import dimscommon.datacollection as dc
-collection = dc.DataCollection(
-    "Data collecton name", # Name of the collection 
-    ["sqr_size", "min_point"], # Collection parameter names 
-    ["100x100px", "4"],  # Collection parameter values
-    ["speed"] # Names for additional columns for each trigger
-)
+import dimscommon.trigger as tg
+collection_id = create_datacollection(url, "Test collection", [], [], []) # Additional collection parameters can be passed using those arrays
 ```
 
 ### Uploading trigger:
 
 ```python
 import dimscommon.trigger as tg
-collection_id = create_datacollection(url, "Test collection", [], [],
-                                              [])
+collection_id = create_datacollection(url, "Test collection", [], [], []) # Additional collection parameters can be passed using those arrays
 # ...
 
 upload_trigger(tg.create_trigger_flat(
