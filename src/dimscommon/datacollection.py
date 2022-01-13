@@ -59,7 +59,7 @@ class DataCollection:
                  collection_parameter_names: List[str],
                  parameter_values: List[str],
                  additional_trigger_info: List[str], 
-                 sql_connection=None: SqlConnection) -> None:
+                 sql_connection=None) -> None:
 
         SUCCES_MESSAGE = "Succes!"
 
