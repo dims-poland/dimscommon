@@ -1,3 +1,7 @@
+"""
+TODO: Thats all messy as hell, but it works for now
+"""
+
 import sys
 from typing import List
 
@@ -6,16 +10,15 @@ import psycopg2 as pg
 
 from dimscommon.trigger import Trigger
 
-
 class SqlConnection:
     def __init__(self, **params) -> None:
-        # if params is not None:
-        #     self.connection = pg.connect(params)
-        # else:
-        self.connection = pg.connect(host="localhost",
-                                     database="dims_events",
-                                     user="admin",
-                                     password="pssd123")
+        if params is not None:
+            self.connection = pg.connect(**params)
+        else:
+            self.connection = pg.connect(host="localhost",
+                                        database="dims_events",
+                                        user="admin",
+                                        password="pssd123")
 
     def get_cursor(self):
         """ Get the sql cursor - cursor needs to be closed by the caller """
@@ -27,42 +30,11 @@ class SqlConnection:
 
     def select(self, collumns, table, where=""):
         """ Create select query on connection """
-        raise NotImplemented
-        SQL_QUERY = (f"\n"
-                     f"SELECT"
-                     f" path,\n"
-                     f" start_frame,\n"
-                     f" end_frame,\n"
-                     f" box_min_x,\n"
-                     f" box_min_y,\n"
-                     f" box_max_x,\n"
-                     f" box_max_y\n"
-                     f"{collumns}\n"
-                     f"FROM\n"
-                     f" {table}\n"
-                     f"WHERE\n"
-                     f" {where}\n")
-        cursor = self.connection.cursor()
-        cursor.execute(SQL_QUERY)
-
-        query_result = np.array([])
-        row = cursor.fetchone()
-
-        while row is not None:
-            query_result = np.append(row)
-
-        cursor.close()
-
-        return query_result
+        raise NotImplementedError
 
     def insert(self, table, values):
         """ Insert into db """
         raise NotImplementedError
-        SQL_QUERY = f"""
-                    INSERT INTO {table}
-                    VALUES {values}
-                    """
-        raise NotImplemented
 
     def __del__(self):
         if self.connection:
@@ -86,13 +58,17 @@ class DataCollection:
     def __init__(self, collection_name: str,
                  collection_parameter_names: List[str],
                  parameter_values: List[str],
-                 additional_trigger_info: List[str]):
+                 additional_trigger_info: List[str], 
+                 sql_connection=None: SqlConnection) -> None:
 
         SUCCES_MESSAGE = "Succes!"
 
         self.additional_trigger_info = additional_trigger_info
 
-        self.sql_connection = SqlConnection()
+        if sql_connection is not None:
+            self.sql_connection = SqlConnection(sql_connection)
+        else:
+            self.sql_connection = SqlConnection()
 
         # create a cursor
         cur = self.sql_connection.get_cursor()
