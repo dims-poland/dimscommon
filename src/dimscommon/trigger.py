@@ -94,6 +94,8 @@ def create_trigger_flat(file, start_frame, end_frame, box_min_x, box_min_y,
 def create_trigger_dict(dictionary):
     """ Creates trigger from dictionary field names need to be the same as @field_names """
     print("Check correctness")
+    if 'additional_data' not in dictionary:
+        dictionary['additional_data'] = {}
     return Trigger(file=dictionary['file'],
                    start_frame=dictionary['start_frame'],
                    end_frame=dictionary['end_frame'],
