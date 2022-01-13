@@ -11,9 +11,9 @@ import psycopg2 as pg
 from dimscommon.trigger import Trigger
 
 class SqlConnection:
-    def __init__(self, **params) -> None:
+    def __init__(self,sql_connection ,**params) -> None:
         if params is not None:
-            self.connection = pg.connect(**params)
+            self.connection = sql_connection
         else:
             self.connection = pg.connect(host="localhost",
                                         database="dims_events",
@@ -36,9 +36,9 @@ class SqlConnection:
         """ Insert into db """
         raise NotImplementedError
 
-    def __del__(self):
-        if self.connection:
-            self.connection.close()
+    # def __del__(self):
+    #     if self.connection:
+    #         self.connection.close()
 
 
 def execute_sql_no_throw(cursor, sql_string, succes_msg="Succes!", error_msg="Failed", silent=False):
