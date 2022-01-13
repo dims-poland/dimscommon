@@ -412,7 +412,7 @@ def create_datacollection(url, collection_name: str,
                                  "Content-Type": "application/json",
                              })
 
-    if response.status_code == 200:
+    if response.status_code >= 400:
         response = response.json()
         collection_id = response['collection_id']
         return collection_id
