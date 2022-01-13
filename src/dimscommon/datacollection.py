@@ -173,7 +173,7 @@ class DataCollection:
         # Get the trigger id
         trigger_id = cur.fetchone()[0]
 
-        if trigger.additional_data is not None:
+        if trigger.additional_data:
             INSER_ADDITIONAL_TRIGGER_INFO = (f"INSERT INTO\n"
                                              f" {self.trigger_additional_props_table_name}\n"
                                              f"VALUES ({', '.join([str(trigger.additional_data[key]) for key in self.additional_trigger_info])}); \n")
