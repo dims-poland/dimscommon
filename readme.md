@@ -21,6 +21,7 @@ import dimscommon.datacollection as dc
 ```
 
 Testing db can be launched using `docker-compose`
+Tesing db can be launched using `docker-compose`
 
 ```python
 docker-compose up
@@ -127,11 +128,14 @@ def get_triggers_from_db(trigger_ids: List[int]):
 To upload triggers to the labeling server first you need to create datacollection
 on the server by calling:
 
+
 ```python
 def create_datacollection(url, collection_name: str,
                           collection_parameter_names: List[str],
                           parameter_values: List[str],
                           additional_trigger_info: List[str]) -> int
+import dimscommon.trigger as tg
+collection_id = create_datacollection(url, "Test collection", [], [], []) # Additional collection parameters can be passed using those arrays
 ```
 
 You will get a collection ID which can be later used to push triggers to the 
