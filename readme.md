@@ -20,7 +20,7 @@ or to use `DataCollection`:
 import dimscommon.datacollection as dc
 ```
 
-Tesing db can be launched using `docker-compose`
+Testing db can be launched using `docker-compose`
 
 ```python
 docker-compose up
@@ -122,43 +122,24 @@ def get_id(trigger: Trigger):
 def get_triggers_from_db(trigger_ids: List[int]):
 ```
 
+# Comunicating with labeling server
 
-## dimscommon.datacollection
-
-### Creating data collecton:
-
-When creating data collection coresponding tables in db will be created
+To upload triggers to the labeling server first you need to create datacollection
+on the server by calling:
 
 ```python
-import dimscommon.datacollection as dc
-collection = dc.DataCollection(
-    "Data collecton name", # Name of the collection 
-    ["sqr_size", "min_point"], # Collection parameter names 
-    ["100x100px", "4"],  # Collection parameter values
-    ["speed"] # Names for additional columns for each trigger
-)
+def create_datacollection(url, collection_name: str,
+                          collection_parameter_names: List[str],
+                          parameter_values: List[str],
+                          additional_trigger_info: List[str]) -> int
 ```
 
-### Uploading trigger:
+You will get a collection ID which can be later used to push triggers to the 
+labeling server using:
 
 ```python
-import dimscommon.datacollection as dc
-import dimscommon.trigger as tg
-
-conn = dc.DataCollection("Test collection", [], [],
-                        ["speed"])
-
-# ...
-
-collection.upload_trigger(tg.create_trigger_flat(
-                            file="filename",
-                            start_frame=1,
-                            end_frame=2,
-                            box_min_x=1,
-                            box_min_y=2,
-                            box_max_x=3,
-                            box_max_y=4,
-                            additional_data={
-                                "speed": 12,
-                            }))
+def upload_trigger(trigger: Trigger, collection_id: int, url: str) -> int
 ```
+
+This function will add the trigger to the labbeling studio and the DB and return 
+the global trigger id that assigned to it by the server for later use.
