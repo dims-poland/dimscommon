@@ -18,7 +18,7 @@ setuptools.setup(
         'pandas',
         'numpy',
         'opencv-python',
-        'psycopg2',
+        'psycopg2-binary'
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
